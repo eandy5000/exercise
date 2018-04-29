@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Counter from "./components/counter";
-
+import ProductContainer from "./components/productComponents/productContainer";
 export default function App() {
   return (
     <div>
-      <Counter />
+      <ProductContainer />
     </div>
   );
 }

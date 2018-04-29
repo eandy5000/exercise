@@ -5,4 +5,3 @@ export default function getData() {
     resolve(data);
   });
 }
-console.log("foo", typeof data, data.CatalogEntryView);
