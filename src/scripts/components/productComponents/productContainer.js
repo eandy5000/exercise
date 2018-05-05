@@ -4,6 +4,9 @@ import ProductTitle from "./productTitle";
 import ProductImg from "./productImg";
 import ProductPrice from "./productPrice";
 import ProductPromotions from "./productPromotions";
+import ProductHighlights from "./ProductHighlights";
+import ProductAddButtons from "./productAddButtons";
+import ProductQuantityButtons from "./productQuantityButtons";
 
 class ProductContainer extends React.Component {
   constructor(props) {
@@ -12,7 +15,9 @@ class ProductContainer extends React.Component {
       product: {},
       primaryImg: "",
       displayPrice: "",
-      promotions: []
+      promotions: [],
+      highlights: [],
+      customerReview: []
     };
   }
   componentWillMount() {
@@ -23,20 +28,26 @@ class ProductContainer extends React.Component {
           product: data,
           primaryImg: data.Images[0].PrimaryImage[0].image,
           displayPrice: data.Offers[0].OfferPrice[0].formattedPriceValue,
-          promotions: getPromoMessage(data.Promotions)
+          promotions: getPromoMessage(data.Promotions),
+          highlights: data.ItemDescription[0].features,
+          customerReview: data.CustomerReview
         });
       });
   }
   render() {
-    console.log(this.state);
     const { title } = this.state.product;
-    const { primaryImg, displayPrice, promotions } = this.state;
+    const { primaryImg, displayPrice, promotions, highlights } = this.state;
+    console.log("tester ", this.state.customerReview);
+    console.log("tester2 ", this.state.highlights);
     return (
       <div>
         <ProductTitle title={title} />
         <ProductImg image={primaryImg} />
         <ProductPrice price={displayPrice} />
         <ProductPromotions promos={promotions} />
+        <ProductHighlights list={highlights} />
+        <ProductQuantityButtons />
+        <ProductAddButtons />
       </div>
     );
   }
