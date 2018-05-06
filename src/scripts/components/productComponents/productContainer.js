@@ -7,6 +7,7 @@ import ProductPromotions from "./productPromotions";
 import ProductHighlights from "./ProductHighlights";
 import ProductAddButtons from "./productAddButtons";
 import ProductQuantityButtons from "./productQuantityButtons";
+import ProductReviewContainer from "./productReviewContainers";
 
 class ProductContainer extends React.Component {
   constructor(props) {
@@ -17,9 +18,24 @@ class ProductContainer extends React.Component {
       displayPrice: "",
       promotions: [],
       highlights: [],
-      customerReview: []
+      customerReview: [],
+      cartQuantity: 0
     };
+    this.changeCartQuantity = this.changeCartQuantity.bind(this);
   }
+
+  changeCartQuantity(num) {
+    if (this.state.cartQuantity + num >= 0) {
+      this.setState(state => {
+        return {
+          cartQuantity: state.cartQuantity + num
+        };
+      });
+    } else {
+      return;
+    }
+  }
+
   componentWillMount() {
     productData()
       .then(response => response.CatalogEntryView[0])
@@ -36,18 +52,29 @@ class ProductContainer extends React.Component {
   }
   render() {
     const { title } = this.state.product;
-    const { primaryImg, displayPrice, promotions, highlights } = this.state;
-    console.log("tester ", this.state.customerReview);
-    console.log("tester2 ", this.state.highlights);
+    const {
+      primaryImg,
+      displayPrice,
+      promotions,
+      highlights,
+      customerReview,
+      cartQuantity
+    } = this.state;
+    // console.log("tester ", this.state.customerReview);
+    // console.log("tester2 ", this.state.highlights);
     return (
-      <div>
+      <div className="pa3">
         <ProductTitle title={title} />
         <ProductImg image={primaryImg} />
         <ProductPrice price={displayPrice} />
         <ProductPromotions promos={promotions} />
         <ProductHighlights list={highlights} />
-        <ProductQuantityButtons />
-        <ProductAddButtons />
+        <ProductQuantityButtons
+          quantity={cartQuantity}
+          changeFunction={this.changeCartQuantity}
+        />
+        <ProductAddButtons quantity={cartQuantity} />
+        <ProductReviewContainer reviews={customerReview} />
       </div>
     );
   }

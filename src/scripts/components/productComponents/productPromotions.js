@@ -5,5 +5,9 @@ export default function ProductPromotions(props) {
 }
 
 function promoItem({ description, key }) {
-  return <li key={key}>{description}</li>;
+  return (
+    <li className="red" key={key}>
+      {description}
+    </li>
+  );
 }
