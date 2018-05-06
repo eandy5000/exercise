@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import productData from "../../../model";
 import ProductTitle from "./productTitle";
 import ProductImg from "./productImg";
@@ -8,6 +10,7 @@ import ProductHighlights from "./ProductHighlights";
 import ProductAddButtons from "./productAddButtons";
 import ProductQuantityButtons from "./productQuantityButtons";
 import ProductReviewContainer from "./productReviewContainers";
+import { addToCartAction } from "../../actions";
 
 class ProductContainer extends React.Component {
   constructor(props) {
@@ -19,7 +22,7 @@ class ProductContainer extends React.Component {
       promotions: [],
       highlights: [],
       customerReview: [],
-      cartQuantity: 0,
+      cartQuantity: 1,
       inventoryStatus: ""
     };
     this.changeCartQuantity = this.changeCartQuantity.bind(this);
@@ -38,10 +41,17 @@ class ProductContainer extends React.Component {
     }
   }
 
-  addToCart(event) {
-    event.target.blur();
-    if (this.state.cartQuantity === 0) {
-      this.setState({ cartQuantity: this.state.cartQuantity + 1 });
+  addToCart() {
+    const { cartQuantity, product } = this.state;
+
+    if (cartQuantity > 0) {
+      console.log("added to cart");
+      this.props.addToCartAction({
+        qty: cartQuantity,
+        product: product.title,
+        price: parseInt(product.Offers[0].OfferPrice[0].priceValue) / 100,
+        id: product.UPC
+      });
     }
   }
 
@@ -69,10 +79,11 @@ class ProductContainer extends React.Component {
       highlights,
       customerReview,
       cartQuantity,
-      addToCart,
+      addToCartFn,
       inventoryStatus
     } = this.state;
 
+    console.log("test ", this.state.product);
     return (
       <div className="pa3">
         <ProductTitle title={title} />
@@ -103,4 +114,8 @@ function getPromoMessage(promoList) {
   });
 }
 
-export default ProductContainer;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addToCartAction }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(ProductContainer);
