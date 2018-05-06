@@ -15,7 +15,6 @@ export default class Review extends React.Component {
   timeFormatter(time) {
     if (time) {
       const formatedTime = new Date(time);
-      console.log("time ", formatedTime.getFullYear());
       const dateObj = {
         month: formatedTime.getMonth() + 1,
         day: formatedTime.getDate(),

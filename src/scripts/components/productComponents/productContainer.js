@@ -19,9 +19,11 @@ class ProductContainer extends React.Component {
       promotions: [],
       highlights: [],
       customerReview: [],
-      cartQuantity: 0
+      cartQuantity: 0,
+      inventoryStatus: ""
     };
     this.changeCartQuantity = this.changeCartQuantity.bind(this);
+    this.addToCart = this.addToCart.bind(this);
   }
 
   changeCartQuantity(num) {
@@ -36,6 +38,13 @@ class ProductContainer extends React.Component {
     }
   }
 
+  addToCart(event) {
+    event.target.blur();
+    if (this.state.cartQuantity === 0) {
+      this.setState({ cartQuantity: this.state.cartQuantity + 1 });
+    }
+  }
+
   componentWillMount() {
     productData()
       .then(response => response.CatalogEntryView[0])
@@ -46,7 +55,8 @@ class ProductContainer extends React.Component {
           displayPrice: data.Offers[0].OfferPrice[0].formattedPriceValue,
           promotions: getPromoMessage(data.Promotions),
           highlights: data.ItemDescription[0].features,
-          customerReview: data.CustomerReview
+          customerReview: data.CustomerReview,
+          inventoryStatus: data.inventoryStatus
         });
       });
   }
@@ -58,10 +68,11 @@ class ProductContainer extends React.Component {
       promotions,
       highlights,
       customerReview,
-      cartQuantity
+      cartQuantity,
+      addToCart,
+      inventoryStatus
     } = this.state;
-    // console.log("tester ", this.state.customerReview);
-    // console.log("tester2 ", this.state.highlights);
+
     return (
       <div className="pa3">
         <ProductTitle title={title} />
@@ -73,7 +84,10 @@ class ProductContainer extends React.Component {
           quantity={cartQuantity}
           changeFunction={this.changeCartQuantity}
         />
-        <ProductAddButtons quantity={cartQuantity} />
+        <ProductAddButtons
+          inventoryStatus={inventoryStatus}
+          addToCart={this.addToCart}
+        />
         <ProductReviewContainer reviews={customerReview} />
       </div>
     );

@@ -19,7 +19,6 @@ class ProductReviewContainer extends React.Component {
       totalReviews,
       Pro
     } = nextProps.reviews[0];
-    console.log("next ", nextProps);
     if (nextProps.reviews[0] !== undefined) {
       this.setState({
         con: Con[0],
